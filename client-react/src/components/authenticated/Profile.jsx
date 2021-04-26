@@ -1,0 +1,37 @@
+import React, { useState, useEffect  } from 'react'
+import loggedin from '../../scripts/authentication'
+
+
+function Profile(props) {
+
+    const [data, setData] = useState({})
+    // console.log(data,'<----------------------------data');
+
+    useEffect(() => {
+        loggedin.getData((response)=>{
+            setData(response)
+        })
+
+    }, [])
+
+    // console.log(data,'<---PROPS IN PROFILE--');
+
+
+    if (data !== {}){
+        return(<div style={{height:'90vh'}}>
+            <div style={{display:'flex','justifyContent':'space-evenly','alignItems':'center'}}>
+                <h4 style={{}}>{data.username}</h4>
+                <img src={data.provider  == 'github' ? data.photo : data.img} style={{borderRadius:'50%','border':'1px solid black','height':'100px', margin:'20px'}} alt="slika"/>
+            </div>
+            <hr/>
+            <div style={{'height':'80%','display':'flex','justifyContent':'center',alignItems:'center'}}>
+                <h1>welcome to talkit app {data.username}</h1>
+            </div>
+        </div> 
+        )
+    }else{
+        return( <div></div> )
+    }
+}
+
+export default Profile

@@ -1,0 +1,67 @@
+.AuthInputDiv{
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0px;
+    width: 50%;
+    height: 100px;
+}
+
+
+.AuthOuterDiv{
+    /* border: 1px solid red; */
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.AuthForm{
+    /* border: 1px solid red; */
+    width: 80%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.AuthInputTag{
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    border: 1px solid grey;
+}
+
+.AuthTabelTag{
+    /* border: 1px solid red; */
+    text-align: left;
+    font-size: 20px;
+    font-weight: 10;
+}
+
+.AuthTitle{
+
+}
+
+.AuthLinkTag{
+    /* border: 1px solid red; */
+    text-decoration: none;
+    color: dodgerblue;
+    margin-top: -30px;
+    margin-bottom: 20px;
+    display: flex;
+}
+input[type=submit]{
+    padding: 15px 70px;
+    background-color: grey;
+    color: black;
+    border: none;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+input[type=submit]:active{
+    outline: none;
+    border: none;
+}
