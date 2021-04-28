@@ -1,10 +1,11 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 var cors = require('cors')
+const ObjectID = require('mongodb').ObjectID;
 
 
 
-module.exports = function (app, myDataBase, onlineUsers) {
+module.exports = function (app, myDataBase, onlineUsers,io) {
   var corsOptions = {
     origin:'http://localhost:3000', 
     credentials:true,            //access-control-allow-credentials:true
@@ -41,14 +42,13 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
       uspesnost:true,
       socketioId:''
     }
- 
-        onlineUsers.insertOne(obj1,(err, doc)=>{
-                  if(err){
-                      console.log('prislo je do napake pri vnasanju uporabnika v DB');
-                  }else {
-                      console.log('uporabnik uspesno vnesen v DB');
-                  }
-        })
+    onlineUsers.insertOne(obj1,(err, doc)=>{
+              if(err){
+                  console.log('prislo je do napake pri vnasanju uporabnika v DB');
+              }else {
+                  console.log('uporabnik uspesno vnesen v DB');
+              }
+    })
     res.send(obj);
   });
   
@@ -61,41 +61,51 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
   })
 
 
-  app.get('/findUser',(req,res)=>{
-    myDataBase.findOne({ username: req.body.username }, function (err, user) {
-    }
-  )})
+  // app.get('/findUser',(req,res)=>{
+  //   myDataBase.findOne({ username: req.body.username }, function (err, user) {
+  //   }
+  // )})
 
   app.get('/getData',ensureAuthenticated,( req, res) =>{
-    console.log(res.req.user,'\n----------------------<<  this data sent');
+    // console.log(res.req.user,'\n----------------------<<  this data sent');
     res.send(res.req.user)
   })
+  // getSpecificUserData
+  app.post('/getSpecificUserData',ensureAuthenticated,( req, res) =>{ 
+         
+    onlineUsers.findOne({ _id: new ObjectID(req.body.userId) }, function (err, user) {
+      if(user){ 
+        let obj = {
+          username:user.username,
+          img:user.img
+        }
+        res.send(obj)
+      } 
+      else if (err) { 
+            res.send("napaka")
+            throw err
+      }else{
+      res.send('ni najden uporbnik')
+      }
+    })
+  })
+
 
   app.get('/isAuthenticated',ensureAuthenticated, (req,res)=>{
     res.send(true)
   })
-  
-    // tega zgleda nerabmo
-    // passport.authenticate('local', { failureRedirect: '/' }), (req, res, next) => {
-    //   console.log('--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------');
-    //   res.redirect('/chat');
-    // }
 
 
-  // app.route('/auth/github').get(passport.authenticate('github'));
 
-  app.route('/auth/github').get(passport.authenticate('github'), (req, res) => {
-    
+  app.route('/auth/github').get(passport.authenticate('github'), (req, res) => {    
     // req.session.user_id = req.user.id; // tole nevem ce je potrebno ubistvu tudi nevem kaj naredi neki spremeni session sam nevem kje, pa tudi req.session.user_id je ze enako req.user.id
     onlineUsers.insertOne(res.req.user,(err, doc)=>{
       if(err){
-          console.log('prislo je do napake pri vnasanju uporabnika v DB');
+          console.log('prislo je do napake pri vnasanju uporabnika v DB (github login)');
       }else {
           console.log('uporabnik uspesno vnesen v DB');
             }
       })
-
-
     res.redirect('http://localhost:3000/user')        
   });
 
@@ -106,12 +116,6 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
   });
 
 
-
-  // app.route('/profile').get(ensureAuthenticated, (req, res) => {
-  // });
-
-
-   
   app.route('/onlineUsers').get(ensureAuthenticated, (req, res) => {
     onlineUsers.find({}).toArray(function(err, result) {
       if (err) throw err;
@@ -119,20 +123,16 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
     })
   });
   
-   
-  // app.route('/chat').get(ensureAuthenticated,(req, res) => {
-  //   res.render('pug/chat', { user: req.user }) ; 
-  // });
-  
-  
-  app.route('/logout').get((req, res) => { 
+  app.route('/logout').post((req, res) => { 
     let username = req.user.username   //req.logout() izbrise passport object iz req.sessiona 
+    io.emit('userDisconected', req.body.userId)
+
     req.logout(); 
 
-    onlineUsers.findOneAndDelete({"username":username})
+    onlineUsers.findOneAndDelete({"username":username}) 
     .then((deletedUser)=>{
-      if(deletedUser){ 
-        console.log(`Successfully deleted user.`)
+      if(deletedUser){
+        console.log(`Successfully deleted user from online users DB.`)
       } else{
         console.log('User who is logingout cant be fined in DB');
       }
@@ -140,11 +140,7 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
     .catch(err=> 
       console.error(`Failed to find and delete document: ${err}`) 
       )
-      
-  
-  
   res.send(false)
-  // res.redirect('/');
 });
 
 
@@ -159,14 +155,15 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
           res.send('user whit that username already exisist');
               } else {
                   myDataBase.insertOne({ username: req.body.username, password: hash, img:'https://st4.depositphotos.com/14953852/24787/v/600/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }, (err, doc) => {
-            if (err) {
-              console.log('napaka pri heshanju passworda');
-              res.send('napaka pri heshanju passworda');
-            } else {
-              console.log('uporabnik uspesno registriran');
-              next(null, doc.ops[0]);
-            }
-          });
+                            if (err) {
+                              console.log('napaka pri heshanju passworda');
+                              res.send('napaka pri heshanju passworda');
+                            } else {
+                              console.log('uporabnik uspesno registriran');
+                              next(null, doc.ops[0]);
+                            }
+          }
+         );
         }
       });
     },(req, res)=>{

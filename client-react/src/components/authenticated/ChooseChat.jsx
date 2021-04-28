@@ -1,7 +1,8 @@
 import React, { useState, useEffect  } from 'react'
 import {BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
 import axios from 'axios';
-let c=0
+
+
 function ChooseChat(props) {
     const [onlineUsers , setOnlineUsers ] = useState([]) 
 
@@ -15,24 +16,8 @@ function ChooseChat(props) {
             withCredentials:true,
             url:"http://localhost:4000/onlineUsers"
         }).then( res =>{
-            let obj = {};
-            res.data.map(user => {
-                
-                obj[user._id]=0
-                if (user.username == window.localStorage.getItem('username')){
-                    window.localStorage.setItem('userId', user._id);
-                }    
-            })
                 setOnlineUsers(res.data)
-            })
-            
-            socket.on('privateChatMsg', obj =>{
-                let st = window.localStorage.getItem(obj.posiljateljId);
-                st = parseInt(st)
-                window.localStorage.setItem(obj.posiljateljId, st+1)
-                window.location.reload(false);
-            });
-
+        })
         }, [])
 
         let onlineUsersUX;

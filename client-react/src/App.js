@@ -58,9 +58,9 @@ const getdata = async () =>{
 
 
    
-
-  return (
-    <div className="App">
+ 
+  return (  
+    <div className="App"> 
       <Switch>
         <Route exact  path='/registration' component={Registration}/>
         <Route exact  path='/' > <Login  handleDataFromLoginToProfile={handleDataFromLoginToProfile} /> </Route>
@@ -69,10 +69,9 @@ const getdata = async () =>{
       {/* <button onClick={login} > login</button>
       <button onClick={()=>{history.push('/')}}>redirect</button>
       <button onClick={()=>{history.push('/user')}}>redirect-user</button>
-      <button onClick={logout}>logout</button>   
-      <button onClick={isAuth}>isAuth</button>     
-      <button onClick={getdata}>getData</button>   */}
-
+      <button onClick={logout}>logout</button>
+      <button onClick={isAuth}>isAuth</button>
+      <button onClick={getdata}>getData</button> */}
     </div>
   );
 }

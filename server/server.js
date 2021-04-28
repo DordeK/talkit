@@ -19,7 +19,7 @@ const socketAuth = require('socketio-auth');
 const ObjectID = require('mongodb').ObjectID;
 
 
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
@@ -63,7 +63,6 @@ async function verifyUser (token) {
     setTimeout(() => {
       // this information should come from your cache or database
       let user;
-      console.log('to je token ', token);
       onlineUsers.findOne({"username":token}, function(err, result) {
           if (result == null){
             return reject('USER_NOT_FOUND');
@@ -87,32 +86,30 @@ socketAuth(io, {
     
     try {
       const user = await verifyUser(token);
-      console.log(user,'user---------');
-      socket.user = user;
-      
-      onlineUsers.findAndModify( 
-        { username: token }, 
-        {},
-        { 
-          $set: { 
-            socketioId: socket.id,
+        socket.user = user;
+        
+        onlineUsers.findAndModify( 
+          { username: token }, 
+          {},
+          { 
+            $set: { 
+              socketioId: socket.id,
+            }, 
           }, 
-        }, 
-        { upsert: true, returnOriginal: false },
-        (err, doc) => {
-          if (err){ throw err}
-          console.log('socketio value updated');
-        }
-    );
-    
-    return callback(null, true);
+          { upsert: true, returnOriginal: false },
+          (err, doc) => {
+            if (err){ throw err}
+            console.log('socketio value updated');
+          }
+      );
+      
+      return callback(null, true);
   } catch (e) {
-    console.log(`Socket ${socket.id} unauthorized.`);
-    return callback({ message: 'UNAUTHORIZED' });
+      console.log(`Socket ${socket.id} unauthorized.`);
+      return callback({ message: 'UNAUTHORIZED' });
   }
 },
 postAuthenticate: (socket) => {
-  
   console.log(`Socket ${socket.id} authenticated sucessfuly.`);
 },
 disconnect: (socket) => {
@@ -123,7 +120,7 @@ disconnect: (socket) => {
 
 
 
-  routes(app, myDataBase, onlineUsers);
+  routes(app, myDataBase, onlineUsers, io);
   auth(app, myDataBase);
 
   let currentUsers = 0;
@@ -136,7 +133,6 @@ disconnect: (socket) => {
         ++currentUsers; 
 
         // console.info(socket.user,"---------------------socket.handshake.auth----------------------------------------");
-
         io.emit('user', {
           name: socket.request.user.username,
           img: socket.request.user.img || socket.request.user.photo,
@@ -146,7 +142,7 @@ disconnect: (socket) => {
 
         socket.on('dsc',(res)=>{
           console.log('uipdfsuiphsdfghjksdfghjosdfghjfghjoodfgjikoadfgjiodfghjijnkcvbipertyhusdgklhjn');
-          socket.broadcast.emit('dsc', res)
+          // socket.broadcast.emit('dsc', res)
         })
 
         // privateChatMsg
@@ -156,8 +152,11 @@ disconnect: (socket) => {
           let sprejemnikIzDB
           onlineUsers.findOne({ _id: new ObjectID(sprejemnik) }, (err, result) => { // v mongodb je id tako shranjen da moramo dodati ObjectID poglej collection users
             if (err) return console.error(err);
-
+            try{
             io.to(result.socketioId).emit('privateChatMsg', obj) 
+            }catch(e){
+              console.log(e);
+            }
           });
 
         })

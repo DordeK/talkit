@@ -71,6 +71,7 @@ class auth {
             cb()  // calback function
             return (res.data)
         } ) }
+
         
     isAuthenticated() {
         axios({
@@ -108,6 +109,21 @@ class auth {
             cb(res.data)  // calback function
         })
     }
+
+       getSpecificUserData(userId, cb){
+        axios({
+            method:'post',
+            withCredentials:true,
+            data:{
+                userId: userId,
+            },
+            url:"http://localhost:4000/getSpecificUserData"
+        }).then((res)=>{
+            console.log(res,'hiupnvh98,hrewap98hmope8hgohc');
+            cb(res.data)  // calback function
+            })
+        }
+
 }
 
 let loggedin = new auth()

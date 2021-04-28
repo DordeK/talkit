@@ -1,12 +1,14 @@
 import React, { useState, useEffect  } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import SendSharpIcon from '@material-ui/icons/SendSharp';
+import func from '../../scripts/authentication'
 
 export default function PrivateChat(props) {
     
     let socket = props.socket
     const [sporocila, setSporocila] = useState([])
+    const [accepter, setAccepter] = useState({username:'',img:''})
     const {id} = useParams()
-    
     
      
     useEffect(() => {
@@ -20,10 +22,18 @@ export default function PrivateChat(props) {
                 setSporocila(prevMesages => [...prevMesages,obj])
             }
         });
+        window.localStorage.setItem(id,0)
 
-        window.localStorage.setItem(id,0)  
+        socket.on('dsc', obj=>{    
+            console.log(obj,'obj in private chat ');
+        })
 
+        func.getSpecificUserData(id, (res)=>{
+            setAccepter(res)
+        })
     }, [])
+
+
 
     const sendMesage = () =>{
         let msg = document.getElementById("msg").value
@@ -53,7 +63,6 @@ export default function PrivateChat(props) {
     }else{
         let counter=0
         sporocilaOblikovana = sporocila.map(sporocilo =>{
-        //  console.log(sporocilo,'<-----------sporocilo');
          counter++
         return(
             <div key={counter} style={{display:'flex',alignItems:'center', justifyContent:`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "flex-end": "flex-start"}`}}>
@@ -71,12 +80,13 @@ export default function PrivateChat(props) {
     
     return (
         <div>
-            <div id='screen' style={{height:'80vh','border':'1px solid grey','overflowY':'auto'}}>
+                <div style={{width:'95%','height':'25px','fontSize':'20px',display:'flex',margin:'10px 10px','borderBottom':'1px solid grey'}}>{accepter.username}</div>
+            <div id='screen' style={{height:'78vh','overflowY':'auto','position':'relative'}}>
                 {sporocilaOblikovana}
             </div>
-            <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh'}}>
-                <input autoComplete='off' id='msg' style={{width:'80%'}} type="text"/>
-                <button style={{width:'20%'}} onClick={sendMesage}>poslji</button>
+            <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh','alignItems':'center'}}>
+                <input autoComplete='off' id='msg' style={{width:'90%','height':'90%','border':'1px solid black'}} type="text"/>
+                <SendSharpIcon style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px'}} onClick={sendMesage}/>
             </div>
         </div>
     )

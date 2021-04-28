@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect  } from 'react'
+import SendSharpIcon from '@material-ui/icons/SendSharp';
 import {BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
 const ENDPOINT = "http://localhost:4000";
 
@@ -14,21 +15,16 @@ function Chat(props) {
     // console.log('-----------------------------------------Chat---------------------------------------------');
     
     useEffect(()=>{
-        
-        console.log(window.localStorage.getItem('mesagealert'));
-
         // se sporozi ko se nekdo jojna
         socket.on('user', (uporabnik)=>{
             console.log(uporabnik);
         })
-        
+        // sprejem messaga 
         socket.on('chatmessage', (msg)=>{
             // console.log(msg);
             setMessages(prevMesages => [...prevMesages,msg])
         })
-        
-        // console.log('message sent');
-        return () => socket.disconnect();
+        // return () => socket.disconnect();
     },[])
     
     let sporocila;
@@ -36,7 +32,7 @@ function Chat(props) {
     }else{
         let counter=0
      sporocila = messages.map(sporocilo =>{
-         console.log(sporocilo,'<-----------sporocilo');
+        //  console.log(sporocilo,'<-----------sporocilo');
          counter++
         return(
             <div key={counter} style={{display:'flex',alignItems:'center', justifyContent:`${sporocilo.name == window.localStorage.getItem('username') ? "flex-end": "flex-start"}`}}>
@@ -62,12 +58,13 @@ function Chat(props) {
 
     return (
         <div>
-            <div id='screen' style={{height:'80vh','border':'1px solid grey','overflowY':'auto'}}>
+            <div id='screen' style={{height:'84vh','border':'1px solid grey','overflowY':'auto'}}>
                 {sporocila}
             </div>
-            <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh'}}>
-                <input autoComplete='off' id='msg' style={{width:'80%'}} type="text"/>
-                <button style={{width:'20%'}} onClick={sendMesage}>poslji</button>
+
+            <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh','alignItems':'center'}}>
+                <input autoComplete='off' id='msg' style={{width:'90%','height':'90%','border':'1px solid black'}} type="text"/>
+                <SendSharpIcon style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px'}} onClick={sendMesage}/>
             </div>
         </div>
     )
