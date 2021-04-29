@@ -9,14 +9,10 @@ function Chat(props) {
     const [messages, setMessages] = useState([])
     
     
-    // console.log('-----------------------------------------Chat---------------------------------------------');
     
     useEffect(()=>{
-        // se sporozi ko se nekdo jojna
-
         // sprejem messaga 
         socket.on('chatmessage', (msg)=>{
-            // console.log(msg);
             setMessages(prevMesages => [...prevMesages,msg])
         })
 

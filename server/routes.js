@@ -6,24 +6,19 @@ const ObjectID = require('mongodb').ObjectID;
 
 
 module.exports = function (app, myDataBase, onlineUsers,io) {
+
   var corsOptions = {
     origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
+    credentials:true,          
     optionSuccessStatus:200
 
   }
 
   app.use(cors(corsOptions))
 
-
   app.use((req,res,next)=>{
-    // console.log(res);
-    // console.log('incoming call');
-    // console.log(req.session);
     next()
   })
-
-
 
  
 // when calling this route you user have to send password an username as data
@@ -67,18 +62,14 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
   })
 
 
-  // app.get('/findUser',(req,res)=>{
-  //   myDataBase.findOne({ username: req.body.username }, function (err, user) {
-  //   }
-  // )})
 
   app.get('/getData',ensureAuthenticated,( req, res) =>{
     // console.log(res.req.user,'\n----------------------<<  this data sent');
     res.send(res.req.user)
   })
+
   // getSpecificUserData
   app.post('/getSpecificUserData',ensureAuthenticated,( req, res) =>{ 
-         
     onlineUsers.findOne({ _id: new ObjectID(req.body.userId) }, function (err, user) {
       if(user){ 
         let obj = {
@@ -104,7 +95,6 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
 
 
   app.route('/auth/github').get(passport.authenticate('github'), (req, res) => {    
-    // req.session.user_id = req.user.id; // tole nevem ce je potrebno ubistvu tudi nevem kaj naredi neki spremeni session sam nevem kje, pa tudi req.session.user_id je ze enako req.user.id
     let obj ={
       user:res.req.user,
       uspesnost:true,
@@ -124,10 +114,6 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
   });
 
 
-  // app.route('/auth/github/callback').get(passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
-  //   req.session.user_id = req.user.id;
-  //   res.redirect('/chat');
-  // });
 
 
   app.route('/onlineUsers').get(ensureAuthenticated, (req, res) => {
@@ -196,13 +182,12 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
 };
 
 
-//this checks if user has session on his local maschine if so he is logged in 
+//this checks if user has session on his local machine if so he is logged in 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-  // console.log('user is authenticated');
+  console.log('user is authenticated');
     return next();
   }
   console.log('user is not authenticate');
   res.send(false)
-  // res.redirect('/');
 }

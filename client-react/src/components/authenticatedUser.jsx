@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react'
+import React, {  useEffect  } from 'react'
 import {BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
 import Chat from './authenticated/Chat'
 import Profile from './authenticated/Profile'
@@ -6,7 +6,6 @@ import ChooseChat from './authenticated/ChooseChat'
 import PrivateChat from './authenticated/PrivateChat'
 import NavBar from './authenticated/NavBar'
 import nextId from "react-id-generator";
-import $ from "jquery";
 import axios from 'axios';
 
 
@@ -48,9 +47,6 @@ function AuthenticatedUser(props) {
             let st = window.localStorage.getItem(obj.posiljateljId);
             st = parseInt(st)
             window.localStorage.setItem(obj.posiljateljId, st+1)
-            // if(window.location.pathname === '/user/choosechat'){
-                // window.location.reload(false);
-            // }
         });
 
 

@@ -43,7 +43,6 @@ function Registration() {
     useEffect(()=>{
 
     })
-    console.log(loggedin.loggedin,'----------------------------------REGISTRATION----------------------------------------------------');
     return (
         
         <div className='AuthOuterDiv'>

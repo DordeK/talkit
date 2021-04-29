@@ -1,7 +1,6 @@
 import React, { useState, useEffect  } from 'react'
-import {BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
+import {BrowserRouter as Link } from "react-router-dom";
 import axios from 'axios';
-import $ from "jquery";
 
 
 
@@ -12,7 +11,7 @@ function ChooseChat(props) {
     
     
     useEffect(() => {
-        // onlineUsers
+        // get onlineUsers
         axios({
             method:'get',
             withCredentials:true,
@@ -22,13 +21,10 @@ function ChooseChat(props) {
         })
         }, [])
         
-        // useEffect(() => {
             socket.on('privateChatMsg', obj =>{
                 let k = onlineUsers
                 setOnlineUsers(k)
-                // $(`#newMsgsId${obj.posiljateljId}`).load(window.location.href +`#newMsgsId${obj.posiljatelj}`)
             });
-        // })
 
 
         let onlineUsersUX;

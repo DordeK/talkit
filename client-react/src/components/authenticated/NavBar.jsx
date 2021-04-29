@@ -1,6 +1,6 @@
 import {BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
 import axios from 'axios';
-import { useState, useEffect  } from 'react'
+import { useState  } from 'react'
 import { useHistory } from "react-router-dom";
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import ExitToAppSharpIcon from '@material-ui/icons/ExitToAppSharp';
@@ -62,10 +62,7 @@ export default function NavBar(props) {
                 url:"http://localhost:4000/logout"
             }).then((res)=>{
                 window.localStorage.removeItem(window.localStorage.getItem('userId'));
-                // window.localStorage.removeItem('username');
-                // window.localStorage.removeItem('userId');
-                // window.localStorage.removeItem('mesagealert');
-                // window.localStorage.removeItem('img');
+
                 localStorage.clear();
                 history.push('/')
             } ) 

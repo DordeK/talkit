@@ -47,11 +47,13 @@ io.use(
    })
 );
 
-let clienstSockets
 
+// myDB takes calback function as parameter, parameter function is called when database is connected, funtion passed as argument takes mongoDb instance as parameter (client)
 myDB(async (client) => {
   const myDataBase = await client.db('database').collection('users'); //creating collection for database creacted in connection.js
   const onlineUsers = await client.db('database').collection('online');
+
+
 
 
 
@@ -120,6 +122,8 @@ disconnect: (socket) => {
 
 
 
+
+
   routes(app, myDataBase, onlineUsers, io);
   auth(app, myDataBase);
 
@@ -132,20 +136,10 @@ disconnect: (socket) => {
         console.log('-------------------\n');
         ++currentUsers; 
 
-        // console.info(socket.user,"---------------------socket.handshake.auth----------------------------------------");
-
-        // io.emit('user', {
-        //   name: socket.request.user.username,
-        //   img: socket.request.user.img || socket.request.user.photo,
-        //   currentUsers,
-        //   connected: true
-        // }); 
-
         // privateChatMsg
         socket.on('privateChatMsg', (obj) =>{
           let {sporocilo, posiljatelj, sprejemnik, posiljateljId } =obj
           //get socket id of sprejemnik
-          let sprejemnikIzDB
           onlineUsers.findOne({ _id: new ObjectID(sprejemnik) }, (err, result) => { // v mongodb je id tako shranjen da moramo dodati ObjectID poglej collection users
             if (err) return console.error(err);
             try{
@@ -154,7 +148,6 @@ disconnect: (socket) => {
               console.log(e);
             }
           });
-
         })
 
         
@@ -170,27 +163,19 @@ disconnect: (socket) => {
         socket.on('disconnect', () => {
           console.log('A user has disconnected');
           --currentUsers;
-
-          // io.emit('user', {
-          //   name: socket.request.user.username,
-          //   img: socket.request.user.img,
-          //   currentUsers, 
-          //   connected: false
-          // });
         });
   });
 
 
 }).catch((e) => {
   app.route('/').get((req, res) => {
-    console.log('prislo je do napake med nalaganjem beckend kode 89 line');
-    res.render('pug');
+    console.log(e,'\n');
+    console.log('prislo je do napake med nalaganjem beckend kode 172 line');
   }); 
 });
 
 function onAuthorizeSuccess(data, accept) {
-  // console.log('successful connection to socket.io');
-
+  console.log('successful connection to socket.io');
   accept(null, true);
 }
 

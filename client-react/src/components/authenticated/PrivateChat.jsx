@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import {  useParams } from 'react-router-dom'
 import SendSharpIcon from '@material-ui/icons/SendSharp';
 import func from '../../scripts/authentication'
 
@@ -52,7 +52,6 @@ export default function PrivateChat(props) {
             sprejemnik: id,
             posiljateljId:window.localStorage.getItem('userId')
         }
-        // console.log(obj);
         if(msg == '' || msg == null) return
         
         socket.emit('privateChatMsg', obj)
@@ -73,7 +72,6 @@ export default function PrivateChat(props) {
         let counter=0
         sporocilaOblikovana = sporocila.map(sporocilo =>{
          counter++
-        //  console.log(sporocilo);
         return(
             <div key={counter} style={{display:'flex',alignItems:'center', justifyContent:`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "flex-end": "flex-start"}`}}>
                 <img style={{borderRadius:'50%',height:'40px','border':'1px solid grey',margin:'0 2px', 'order':`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "1": "0"}`}} src={`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? window.localStorage.getItem('img') : accepter.img}`} alt="slika"/>
@@ -92,7 +90,6 @@ export default function PrivateChat(props) {
 
         useEffect(()=>{
             document.addEventListener("keyup", function(event) {
-                // console.log(props);
                 if(event.keyCode === 13){
                     sendMesage()
                 }

@@ -66,6 +66,7 @@ const getdata = async () =>{
         <Route exact  path='/' > <Login  handleDataFromLoginToProfile={handleDataFromLoginToProfile} /> </Route>
         <PrivateRoutes  path='/user' userData={userData} component={authenticatedUser} />
       </Switch>
+      {/* used for debuging */}
       {/* <button onClick={login} > login</button>
       <button onClick={()=>{history.push('/')}}>redirect</button>
       <button onClick={()=>{history.push('/user')}}>redirect-user</button>

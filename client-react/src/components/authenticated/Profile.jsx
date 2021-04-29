@@ -26,7 +26,7 @@ function Profile(props) {
         </div> 
         )
     }else{
-        return( <div></div> )
+        return( null )
     }
 }
 
