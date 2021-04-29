@@ -41,7 +41,7 @@ Authetication:
 	passport-github  
 	
   
-database:  
+database:   
 	MongoDB,  
 	express-session,  
 	localStorage  
@@ -52,13 +52,13 @@ database:
 FUNCTIONALITY:  
 	*this apps purpuse is from comunicating thru web  
 	*you can authenticate with github accout or via registartion an later login form on website,  
-	*non authenticated users cannot acces the web-app it redirects them to login site if they are not logedin. This was made with this code in react   img(https://ibb.co/kDPZvKM)  
+	*non authenticated users cannot acces the web-app it redirects them to login site if they are not logedin. This was made with this code in react img(https://ibb.co/kDPZvKM),  
   
-	*to check if user is logedin we use express-session, everytime users logs in the app his id is saved in session as with key:'passport' and when user logs out session id for autheticating is deleted ,
+	*to check if user is logedin we use express-session, everytime users logs in the app his id is saved in session as with key:'passport' and when user logs out session id for autheticating is deleted,
 	
   *to check if user is loged in we use mongodb as database for all users, their password is decripted with bycript library for safety mesures,  
   
-	*when user logs in he is redirected to home page where he sees his name greeting and his picture if he loged in with github in other case no image image is shown,  img('https://ibb.co/0DmFVxN')  
+	*when user logs in he is redirected to home page where he sees his name greeting and his picture if he loged in with github in other case no image image is shown  img('https://ibb.co/0DmFVxN'),
   
 	*when user logins on the frontend api call is made to created beckend with axios we fetch users data and all users ids that are currently online this data is stored in mongodb database,    
 	
