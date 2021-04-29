@@ -7,7 +7,6 @@ class auth {
 
     
     login = (username, password , cb) => {
-        console.log();
         axios({
             method:'post',
             data:{
@@ -17,23 +16,30 @@ class auth {
             withCredentials:true,
             url:"http://localhost:4000/login"
         }).then( res =>{
+            try{
             window.localStorage.setItem('username', res.data.user.username);
+            window.localStorage.setItem('img', res.data.user.img);
             this.loggedin = res.data.uspesnost
-            // console.log(this.loggedin ,'<-logedin');
+            console.log(this.loggedin ,'<-logedin');
             cb(res.data)  // calback function
 
-            axios({
-                method:'get',
-                withCredentials:true,
-                url:"http://localhost:4000/onlineUsers"
-            }).then( res =>{
-                let arr=res.data
-                arr.map(user => {
-                        window.localStorage.setItem(user._id, 0);                
-                    
-                })})
-
-
+            // axios({
+            //     method:'get',
+            //     withCredentials:true,
+            //     url:"http://localhost:4000/onlineUsers"
+            // }).then( res =>{
+            //     let arr=res.data
+            //     arr.map(user => {
+            //         if(user.username != window.localStorage.getItem('username')){
+            //             window.localStorage.setItem(user._id, 0);                
+            //         }
+            //     })
+            //    })
+            
+            }
+            catch(e){
+                console.log(e);
+            }
          }
         )
 
@@ -119,7 +125,6 @@ class auth {
             },
             url:"http://localhost:4000/getSpecificUserData"
         }).then((res)=>{
-            console.log(res,'hiupnvh98,hrewap98hmope8hgohc');
             cb(res.data)  // calback function
             })
         }

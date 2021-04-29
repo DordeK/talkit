@@ -42,7 +42,6 @@ function LoginPage(props) {
 
 
     useEffect(()=>{
-
     },[])
 
     return (

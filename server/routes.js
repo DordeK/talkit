@@ -30,22 +30,28 @@ module.exports = function (app, myDataBase, onlineUsers,io) {
 // zato ker se funkcija v auth.js file line 32 pozene in potrebuje password and username as arguments
 // passport.authenticate() middleware invokes req.login() automatically !!!  
 app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failure'}), (req, res) => {
-    let obj ={
-      user:res.req.user,
-      uspesnost:true,
-      socketioId:''
-    }
-    let obj1 ={
-      username:res.req.user.username,
-      img:res.req.user.img,
-      password:res.req.user.password,
-      uspesnost:true,
-      socketioId:''
-    }
-    onlineUsers.insertOne(obj1,(err, doc)=>{
-              if(err){
-                  console.log('prislo je do napake pri vnasanju uporabnika v DB');
-              }else {
+  let obj ={
+    user:res.req.user,
+    uspesnost:true,
+    socketioId:''
+  }
+  let obj1 ={
+    username:res.req.user.username,
+    img:res.req.user.img,
+    password:res.req.user.password,
+    uspesnost:true,
+    socketioId:''
+  }
+  onlineUsers.insertOne(obj1,(err, doc)=>{
+    if(err){
+      console.log('prislo je do napake pri vnasanju uporabnika v DB');
+    }else {
+      console.log(doc.ops[0]);
+              let obj = {
+                username: doc.ops[0].username,
+                userId: doc.ops[0]._id,
+              }
+                io.emit('userLoggedin', obj)
                   console.log('uporabnik uspesno vnesen v DB');
               }
     })
@@ -77,7 +83,7 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
       if(user){ 
         let obj = {
           username:user.username,
-          img:user.img
+          img:user.img || user.photo
         }
         res.send(obj)
       } 
@@ -99,10 +105,18 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
 
   app.route('/auth/github').get(passport.authenticate('github'), (req, res) => {    
     // req.session.user_id = req.user.id; // tole nevem ce je potrebno ubistvu tudi nevem kaj naredi neki spremeni session sam nevem kje, pa tudi req.session.user_id je ze enako req.user.id
+    let obj ={
+      user:res.req.user,
+      uspesnost:true,
+      socketioId:''
+    }
+    
     onlineUsers.insertOne(res.req.user,(err, doc)=>{
       if(err){
-          console.log('prislo je do napake pri vnasanju uporabnika v DB (github login)');
+        console.log('prislo je do napake pri vnasanju uporabnika v DB (github login)');
       }else {
+          console.log(obj);
+          io.emit('userLoggedin', obj)
           console.log('uporabnik uspesno vnesen v DB');
             }
       })
@@ -110,10 +124,10 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
   });
 
 
-  app.route('/auth/github/callback').get(passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
-    req.session.user_id = req.user.id;
-    res.redirect('/chat');
-  });
+  // app.route('/auth/github/callback').get(passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
+  //   req.session.user_id = req.user.id;
+  //   res.redirect('/chat');
+  // });
 
 
   app.route('/onlineUsers').get(ensureAuthenticated, (req, res) => {

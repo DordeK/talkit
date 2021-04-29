@@ -133,17 +133,13 @@ disconnect: (socket) => {
         ++currentUsers; 
 
         // console.info(socket.user,"---------------------socket.handshake.auth----------------------------------------");
-        io.emit('user', {
-          name: socket.request.user.username,
-          img: socket.request.user.img || socket.request.user.photo,
-          currentUsers,
-          connected: true
-        });
 
-        socket.on('dsc',(res)=>{
-          console.log('uipdfsuiphsdfghjksdfghjosdfghjfghjoodfgjikoadfgjiodfghjijnkcvbipertyhusdgklhjn');
-          // socket.broadcast.emit('dsc', res)
-        })
+        // io.emit('user', {
+        //   name: socket.request.user.username,
+        //   img: socket.request.user.img || socket.request.user.photo,
+        //   currentUsers,
+        //   connected: true
+        // }); 
 
         // privateChatMsg
         socket.on('privateChatMsg', (obj) =>{
@@ -174,12 +170,13 @@ disconnect: (socket) => {
         socket.on('disconnect', () => {
           console.log('A user has disconnected');
           --currentUsers;
-          io.emit('user', {
-            name: socket.request.user.username,
-            img: socket.request.user.img,
-            currentUsers, 
-            connected: false
-          });
+
+          // io.emit('user', {
+          //   name: socket.request.user.username,
+          //   img: socket.request.user.img,
+          //   currentUsers, 
+          //   connected: false
+          // });
         });
   });
 

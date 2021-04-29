@@ -10,8 +10,9 @@ export default function PrivateRoute({ component: Component, ...rest }) {
 
     const [authenticated, setAutheticated] = useState(false)
 
-    useEffect(() => {
 
+    //ce je uporbnik loginan rendramo komponento ki je podana kot props v nasprotnem primeru ga redirectano ma '/' route, autentikacijo preverjamo v beckendu
+    useEffect(() => {
         loggedin.isAuthenticatedCb((auth)=>{
             if(auth == true){
                 setAutheticated(auth)

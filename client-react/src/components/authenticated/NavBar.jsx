@@ -19,7 +19,8 @@ export default function NavBar(props) {
         fontSize:'20px',
         textDecoration:'none',
         borderTop:'1px solid white',
-        borderBottom:'1px solid white'
+        borderBottom:'1px solid white',
+        zIndex:'2'
     }
 
     let navbarStyle ={
@@ -61,9 +62,11 @@ export default function NavBar(props) {
                 url:"http://localhost:4000/logout"
             }).then((res)=>{
                 window.localStorage.removeItem(window.localStorage.getItem('userId'));
-                window.localStorage.removeItem('username');
-                window.localStorage.removeItem('userId');
-                window.localStorage.removeItem('mesagealert');
+                // window.localStorage.removeItem('username');
+                // window.localStorage.removeItem('userId');
+                // window.localStorage.removeItem('mesagealert');
+                // window.localStorage.removeItem('img');
+                localStorage.clear();
                 history.push('/')
             } ) 
     }
@@ -71,6 +74,7 @@ export default function NavBar(props) {
 
     //redirecting event handler 
     const redirect = (link) =>{
+        console.log(link);
         history.push(link)
         window.location.reload(false);
     }
@@ -82,10 +86,10 @@ export default function NavBar(props) {
                         <MenuSharpIcon onClick={dropdown} style={{fontSize:'35px',marginLeft:'10px'}} />
                         <ExitToAppSharpIcon onClick={logout} style={{fontSize:'35px', marginRight:'10px'}} />
                         {drop? (
-                            <div style={{display:'flex','flexDirection':'column','justifyContent':'start','position':'absolute','left':'8px','top':'67px','backgroundColor':'grey','color':'white','height':'93vh','width':'30%'}}>
-                                <Link style={navbarStylePhone}  onClick={()=>redirect('/user/chat')} >Public chat</Link>
-                                <Link style={navbarStylePhone}  onClick={()=>redirect('/user/choosechat')} >Private chat</Link>
-                                <Link style={navbarStylePhone}  onClick={()=>redirect('/user')}>Profile</Link>
+                            <div style={{ zIndex:'1',display:'flex','flexDirection':'column','justifyContent':'start','position':'absolute','left':'8px','top':'67px','backgroundColor':'grey','color':'white','height':'93vh','width':'30%'}}>
+                                <a style={navbarStylePhone} to='/user/chat'  onClick={()=>redirect('/user/chat')} >Public chat</a>
+                                <a style={navbarStylePhone} to='/user/choosechat'  onClick={()=>redirect('/user/choosechat') } >Private chat</a>
+                                <a style={navbarStylePhone} to='/user' onClick={()=>redirect('/user')}>Profile</a>
                             </div>
                         ):(
                             null
@@ -93,9 +97,9 @@ export default function NavBar(props) {
                     </div>                            
             ):(
                 <div style={{width:'100%',height:'50px',backgroundColor:'grey', display:'flex','justifyContent':'space-evenly','alignItems':'center'}}>
-                    <Link style={navbarStyle}  onClick={()=>redirect('/user/chat')} >Public chat</Link>
-                    <Link style={navbarStyle}  onClick={()=>redirect('/user/choosechat')} >Private chat</Link>
-                    <Link style={navbarStyle}  onClick={()=>redirect('/user')}>Profile</Link>
+                    <Link style={navbarStyle} to='/user/chat'  onClick={()=>redirect('/user/chat')} >Public chat</Link>
+                    <Link style={navbarStyle} to='/user/choosechat' onClick={()=>redirect('/user/choosechat')} >Private chat</Link>
+                    <Link style={navbarStyle} to='/user'  onClick={()=>redirect('/user')}>Profile</Link>
                     <button style={butonStyle}   onClick={logout} >Logout</button>
                 </div>
                 )}

@@ -5,16 +5,12 @@ import loggedin from '../../scripts/authentication'
 function Profile(props) {
 
     const [data, setData] = useState({})
-    // console.log(data,'<----------------------------data');
 
     useEffect(() => {
         loggedin.getData((response)=>{
             setData(response)
         })
-
     }, [])
-
-    // console.log(data,'<---PROPS IN PROFILE--');
 
 
     if (data !== {}){

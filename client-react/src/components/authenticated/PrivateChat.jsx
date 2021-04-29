@@ -19,10 +19,11 @@ export default function PrivateChat(props) {
                     sporocilo,
                     posiljatelj
                 }
+ 
                 setSporocila(prevMesages => [...prevMesages,obj])
+
             }
         });
-        window.localStorage.setItem(id,0)
 
         socket.on('dsc', obj=>{    
             console.log(obj,'obj in private chat ');
@@ -32,19 +33,27 @@ export default function PrivateChat(props) {
             setAccepter(res)
         })
     }, [])
+    useEffect(() => {
+        window.localStorage.setItem(id,0)
+    }, [window.localStorage.getItem(id)])
 
 
 
     const sendMesage = () =>{
-        let msg = document.getElementById("msg").value
-        let obj = {
+        let msg
+        try{
+            msg = document.getElementById("msg").value
+            }catch(e){
+                console.log(e);
+            }        
+            let obj = {
             sporocilo:msg,
             posiljatelj:window.localStorage.getItem('username'),
             sprejemnik: id,
             posiljateljId:window.localStorage.getItem('userId')
         }
         // console.log(obj);
-        if(msg == '') return
+        if(msg == '' || msg == null) return
         
         socket.emit('privateChatMsg', obj)
         let obj1 = {
@@ -64,9 +73,10 @@ export default function PrivateChat(props) {
         let counter=0
         sporocilaOblikovana = sporocila.map(sporocilo =>{
          counter++
+        //  console.log(sporocilo);
         return(
             <div key={counter} style={{display:'flex',alignItems:'center', justifyContent:`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "flex-end": "flex-start"}`}}>
-                <img style={{borderRadius:'50%',height:'30px','border':'1px solid grey',margin:'0 2px'}} src={sporocilo.img} alt="slika"/>
+                <img style={{borderRadius:'50%',height:'40px','border':'1px solid grey',margin:'0 2px', 'order':`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "1": "0"}`}} src={`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? window.localStorage.getItem('img') : accepter.img}`} alt="slika"/>
                 <p  style={{borderRadius:'30px','width':'40%','border':'1px solid black','height':'40px',display:'flex','justifyContent':'center',alignItems:'center'}}>{sporocilo.sporocilo}</p>
             </div>
             )
@@ -77,16 +87,28 @@ export default function PrivateChat(props) {
             document.getElementById('screen').scrollTop = document.getElementById('screen').scrollHeight;
         })
 
+        
+
+
+        useEffect(()=>{
+            document.addEventListener("keyup", function(event) {
+                // console.log(props);
+                if(event.keyCode === 13){
+                    sendMesage()
+                }
+            })
+        },[])
+
     
     return (
         <div>
-                <div style={{width:'95%','height':'25px','fontSize':'20px',display:'flex',margin:'10px 10px','borderBottom':'1px solid grey'}}>{accepter.username}</div>
-            <div id='screen' style={{height:'78vh','overflowY':'auto','position':'relative'}}>
+            <div style={{width:'95%','height':'25px','fontSize':'20px',display:'flex',margin:'10px 10px','borderBottom':'1px solid grey'}}>{accepter.username}</div>
+            <div id='screen' style={{height:'78vh','overflowY':'auto','position':'relative',paddingTop:'10px'}}>
                 {sporocilaOblikovana}
             </div>
             <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh','alignItems':'center'}}>
                 <input autoComplete='off' id='msg' style={{width:'90%','height':'90%','border':'1px solid black'}} type="text"/>
-                <SendSharpIcon style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px'}} onClick={sendMesage}/>
+                <SendSharpIcon style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px','height':'100%',width:'35px'}} onClick={sendMesage}/>
             </div>
         </div>
     )
