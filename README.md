@@ -76,7 +76,7 @@
 	
 	
 
-<img src="https://user-images.githubusercontent.com/69770580/116774976-7d422000-aa60-11eb-834c-4b8c6337b76f.gif" width="100%" height="750"/>
+<img src="https://user-images.githubusercontent.com/69770580/116774976-7d422000-aa60-11eb-834c-4b8c6337b76f.gif" width="100%" />
 
 
 
