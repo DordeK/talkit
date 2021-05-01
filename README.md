@@ -76,7 +76,7 @@
 	
 	
 
-![talkit](https://user-images.githubusercontent.com/69770580/116662313-86ae8800-a98d-11eb-9341-974f285db794.gif)
+![talkit2](https://user-images.githubusercontent.com/69770580/116774976-7d422000-aa60-11eb-834c-4b8c6337b76f.gif)
 
 
 
