@@ -6,42 +6,44 @@ const ObjectID = require('mongodb').ObjectID;
 
 
 module.exports = function (app, myDataBase, onlineUsers,io) {
-
   var corsOptions = {
     origin:'http://localhost:3000', 
-    credentials:true,          
+    credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 
   }
 
   app.use(cors(corsOptions))
 
+// debuging purpose
   app.use((req,res,next)=>{
     next()
   })
+
+
 
  
 // when calling this route you user have to send password an username as data
 // zato ker se funkcija v auth.js file line 32 pozene in potrebuje password and username as arguments
 // passport.authenticate() middleware invokes req.login() automatically !!!  
 app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failure'}), (req, res) => {
-  let obj ={
+  
+  let uporabikPoslanKotResponse ={
     user:res.req.user,
     uspesnost:true,
     socketioId:''
   }
-  let obj1 ={
+  let uporabnikvDB ={
     username:res.req.user.username,
     img:res.req.user.img,
     password:res.req.user.password,
     uspesnost:true,
     socketioId:''
   }
-  onlineUsers.insertOne(obj1,(err, doc)=>{
+  onlineUsers.insertOne(uporabnikvDB,(err, doc)=>{
     if(err){
       console.log('prislo je do napake pri vnasanju uporabnika v DB');
     }else {
-      console.log(doc.ops[0]);
               let obj = {
                 username: doc.ops[0].username,
                 userId: doc.ops[0]._id,
@@ -50,7 +52,7 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
                   console.log('uporabnik uspesno vnesen v DB');
               }
     })
-    res.send(obj);
+    res.send(uporabikPoslanKotResponse);
   });
   
   app.get('/failure',(req,res)=>{
@@ -62,7 +64,6 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
   })
 
 
-
   app.get('/getData',ensureAuthenticated,( req, res) =>{
     // console.log(res.req.user,'\n----------------------<<  this data sent');
     res.send(res.req.user)
@@ -70,6 +71,7 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
 
   // getSpecificUserData
   app.post('/getSpecificUserData',ensureAuthenticated,( req, res) =>{ 
+         
     onlineUsers.findOne({ _id: new ObjectID(req.body.userId) }, function (err, user) {
       if(user){ 
         let obj = {
@@ -112,8 +114,6 @@ app.route('/login').post(passport.authenticate('local',{failureRedirect: '/failu
       })
     res.redirect('http://localhost:3000/user')        
   });
-
-
 
 
   app.route('/onlineUsers').get(ensureAuthenticated, (req, res) => {

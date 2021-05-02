@@ -14,7 +14,7 @@ class auth {
                 password: password
             }, 
             withCredentials:true,
-            url:"http://localhost:4000/login" 
+            url:"http://localhost:4000/login"
         }).then( res =>{
             try{
             window.localStorage.setItem('username', res.data.user.username);
@@ -22,6 +22,20 @@ class auth {
             this.loggedin = res.data.uspesnost
             console.log(this.loggedin ,'<-logedin');
             cb(res.data)  // calback function
+
+            // axios({
+            //     method:'get',
+            //     withCredentials:true,
+            //     url:"http://localhost:4000/onlineUsers"
+            // }).then( res =>{
+            //     let arr=res.data
+            //     arr.map(user => {
+            //         if(user.username != window.localStorage.getItem('username')){
+            //             window.localStorage.setItem(user._id, 0);                
+            //         }
+            //     })
+            //    })
+            
             }
             catch(e){
                 console.log(e);
@@ -42,7 +56,7 @@ class auth {
                 password: password
             }, 
             withCredentials:true,
-            url:"http://localhost:4000/register" 
+            url:"http://localhost:4000/register"
         }).then( res =>{
             console.log(this.loggedin ,'<-registred');
             cb(res.data)  // calback function
@@ -78,7 +92,6 @@ class auth {
             return(res.data);
         })
     }
-
     isAuthenticatedCb(cb) {
         axios({
             method:'get',
@@ -95,7 +108,7 @@ class auth {
         axios({
             method:'get',
             withCredentials:true,
-            url:"http://localhost:4000/getData" // this route is protected, you can only get data if you are logged in, and data logedin user gets is not sensitive
+            url:"http://localhost:4000/getData"
         }).then((res)=>{
             window.localStorage.setItem('username', res.data.username);
             this.loggedin = res.data
@@ -110,7 +123,7 @@ class auth {
             data:{
                 userId: userId,
             },
-            url:"http://localhost:4000/getSpecificUserData" // this route is protected, you can only get data if you are logged in, and data logedin user gets is not sensitive
+            url:"http://localhost:4000/getSpecificUserData"
         }).then((res)=>{
             cb(res.data)  // calback function
             })

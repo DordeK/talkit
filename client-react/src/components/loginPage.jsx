@@ -7,6 +7,7 @@ import axios from 'axios';
 
 
 function LoginPage(props) {
+        // const [logedin, setLogedin] = useState(false)
         const [loginPassword, setloginPassword] = useState('')
         const [loginUsername, setloginUsername] = useState('')
     

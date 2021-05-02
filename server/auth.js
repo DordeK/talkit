@@ -33,12 +33,12 @@ module.exports = function (app, myDataBase) {
       myDataBase.findOne({ username: username }, function (err, user) {
         console.log('User: ' + username + ' attempted to log in.');
         //calling done() will make the flow jump back into passport.authenticate route 
-        if (err) { return done(err) }
+        if (err) {  console.log('prislo je do napaka pri iskanju v DB');  return done(err) }
 
-        if (!user) { return done(null, false) }
+        if (!user) { console.log('uporabnik s taksnim uporbniskim imenom ne obstaja'); return done(null, false) }
 
-        if (!bcrypt.compareSync(password, user.password)) { return done(null, false); }
-
+        if (!bcrypt.compareSync(password, user.password)) { console.log('nepravilo geslo'); return done(null, false); }
+        console.log('uspesno loginan');
         return done(null, user);
       });
     }
@@ -55,7 +55,6 @@ module.exports = function (app, myDataBase) {
 
 
       function (accessToken, refreshToken, profile, cb) { 
-        console.log('fncuivsdgfivuhSDPUVHUIPsh')
         myDataBase.findAndModify(
               { id: profile.id },
               {},

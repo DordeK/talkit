@@ -19,6 +19,7 @@ function Registration() {
 
     const handleRegistration = async e =>{
         e.preventDefault()
+        console.log('---------------------------------------------');
         try{
         await loggedin.registration(registrationUsername,  registrationPassword, (str)=>{
             
@@ -47,18 +48,18 @@ function Registration() {
         
         <div className='AuthOuterDiv'>
                 <h1 className='AuthTitle'>Registration</h1>
-            <form action={handleRegistration} className='AuthForm'>
+            <form onSubmit={handleRegistration} className='AuthForm'>
                 <div className='AuthInputDiv'>
-                    <table className='AuthTabelTag' htmlFor='username' >username</table>
-                    <input autoComplete='off' className='AuthInputTag' onChange={e => setRegistrationUsername(e.target.value) } type="text" name='username' id='username' required/>
+                    <table  className='AuthTabelTag' htmlFor='username' >username</table>
+                    <input required autoComplete='off' className='AuthInputTag' onChange={e => setRegistrationUsername(e.target.value) } type="text" name='username' id='username' required/>
                 </div>
 
                 <div className='AuthInputDiv' >
-                    <table className='AuthTabelTag' htmlFor='password' >password</table>
-                    <input autoComplete='off' className='AuthInputTag' onChange={e => setRegistrationPassword(e.target.value) } type="text" name='password' id='password' required/>
+                    <table  className='AuthTabelTag' htmlFor='password' >password</table>
+                    <input required autoComplete='off' className='AuthInputTag' onChange={e => setRegistrationPassword(e.target.value) } type="text" name='password' id='password' required/>
                 </div>
                 <Link  className='AuthLinkTag' to="/" >Login</Link>
-                <input type="submit"  onClick={handleRegistration} />
+                <input type="submit" name="Submit" value="Register"  />
                     {error == '' ? null :<div style={{backgroundColor:'red',padding:'10px 20px', marginTop:'20px'}}>{error}</div>}
             </form>
 

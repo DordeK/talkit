@@ -1,4 +1,4 @@
-import React, {  useEffect  } from 'react'
+import React, { useState, useEffect  } from 'react'
 import {BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
 import Chat from './authenticated/Chat'
 import Profile from './authenticated/Profile'
@@ -6,6 +6,7 @@ import ChooseChat from './authenticated/ChooseChat'
 import PrivateChat from './authenticated/PrivateChat'
 import NavBar from './authenticated/NavBar'
 import nextId from "react-id-generator";
+import $ from "jquery";
 import axios from 'axios';
 
 
@@ -24,16 +25,23 @@ function AuthenticatedUser(props) {
         });
 
         socket.on('userLoggedin',(data)=>{
-                console.log(data.userId);
-                if(data.userId == undefined){
-                window.localStorage.setItem(data.user._id,0)
+            if(data.userId == undefined){
+            window.localStorage.setItem(data.user._id,0)    
             }else{
                 window.localStorage.setItem(data.userId,0)
             }
+
+            if(window.location.pathname === '/user/choosechat'){
+                window.location.reload(false);
+            }
+
         }) 
 
         socket.on('userDisconected',(userID)=>{
             window.localStorage.removeItem(userID);
+            if(window.location.pathname === '/user/choosechat'){
+                window.location.reload(false);
+            }
         })  
 
 

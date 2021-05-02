@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react'
-import {  useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import SendSharpIcon from '@material-ui/icons/SendSharp';
 import func from '../../scripts/authentication'
 
@@ -32,9 +32,14 @@ export default function PrivateChat(props) {
         func.getSpecificUserData(id, (res)=>{
             setAccepter(res)
         })
+
     }, [])
+
+
     useEffect(() => {
+
         window.localStorage.setItem(id,0)
+    
     }, [window.localStorage.getItem(id)])
 
 
@@ -52,6 +57,7 @@ export default function PrivateChat(props) {
             sprejemnik: id,
             posiljateljId:window.localStorage.getItem('userId')
         }
+        // console.log(obj);
         if(msg == '' || msg == null) return
         
         socket.emit('privateChatMsg', obj)
@@ -72,6 +78,7 @@ export default function PrivateChat(props) {
         let counter=0
         sporocilaOblikovana = sporocila.map(sporocilo =>{
          counter++
+        //  console.log(sporocilo);
         return(
             <div key={counter} style={{display:'flex',alignItems:'center', justifyContent:`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "flex-end": "flex-start"}`}}>
                 <img style={{borderRadius:'50%',height:'40px','border':'1px solid grey',margin:'0 2px', 'order':`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? "1": "0"}`}} src={`${sporocilo.posiljatelj == window.localStorage.getItem('username') ? window.localStorage.getItem('img') : accepter.img}`} alt="slika"/>
@@ -90,6 +97,7 @@ export default function PrivateChat(props) {
 
         useEffect(()=>{
             document.addEventListener("keyup", function(event) {
+                // console.log(props);
                 if(event.keyCode === 13){
                     sendMesage()
                 }
@@ -100,12 +108,12 @@ export default function PrivateChat(props) {
     return (
         <div>
             <div style={{width:'95%','height':'25px','fontSize':'20px',display:'flex',margin:'10px 10px','borderBottom':'1px solid grey'}}>{accepter.username}</div>
-            <div id='screen' style={{height:'78vh','overflowY':'auto','position':'relative',paddingTop:'10px'}}>
+            <div id='screen' style={{height:'75vh','overflowY':'auto','position':'relative',paddingTop:'10px'}}>
                 {sporocilaOblikovana}
             </div>
             <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh','alignItems':'center'}}>
                 <input autoComplete='off' id='msg' style={{width:'90%','height':'90%','border':'1px solid black'}} type="text"/>
-                <SendSharpIcon style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px','height':'100%',width:'35px'}} onClick={sendMesage}/>
+                <SendSharpIcon style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px','fontSize':'30px'}} onClick={sendMesage}/>
             </div>
         </div>
     )

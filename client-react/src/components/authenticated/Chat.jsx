@@ -9,10 +9,14 @@ function Chat(props) {
     const [messages, setMessages] = useState([])
     
     
+    // console.log('-----------------------------------------Chat---------------------------------------------');
     
     useEffect(()=>{
+        // se sporozi ko se nekdo jojna
+
         // sprejem messaga 
         socket.on('chatmessage', (msg)=>{
+            // console.log(msg);
             setMessages(prevMesages => [...prevMesages,msg])
         })
 
@@ -64,13 +68,13 @@ function Chat(props) {
 
     return (
         <div>
-            <div id='screen' style={{height:'84vh','border':'1px solid grey','overflowY':'auto', paddingTop:'10px'}}>
+            <div id='screen' style={{height:'82vh','overflowY':'auto', paddingTop:'10px'}}>
                 {sporocila}
             </div>
 
             <div style={{display:'flex','flexDirection':'row','justifyContent':'center','height':'5vh','alignItems':'center'}}>
                 <input autoComplete='off' id='msg' style={{width:'97%','height':'90%','border':'1px solid grey'}} type="text"/>
-                <SendSharpIcon id='SendSharpIcon' style={{'borderRadius':'50%','border':'1px solid grey','padding':'10px','margin':'0 10px'}} onClick={sendMesage}/>
+                <SendSharpIcon id='SendSharpIcon' style={{'borderRadius':'50%','border':'1px solid grey','padding':'5px','margin':'0 10px','fontSize':'30px'}} onClick={sendMesage}/>
             </div>
         </div>
     )
