@@ -103,6 +103,11 @@ https://user-images.githubusercontent.com/69770580/116818437-9b487700-ab6b-11eb-
   	<br/><br/>
   	
 
-git clone [..url..]  
+git clone https://github.com/DordeK/talkit.git  
+cd client-react 
 npm install  
-npm start 
+npm start
+cd ..
+cd server 
+npm install  
+npm start
