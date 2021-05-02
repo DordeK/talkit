@@ -1,7 +1,7 @@
-# talkit
+# Talkit (chat app)
 
 
-# Uporabljene tehnologije:  
+## Uporabljene tehnologije:  
 
 
 * ## BECKEND:
