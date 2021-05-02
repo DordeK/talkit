@@ -91,7 +91,10 @@
 	<br/><br/>
 	
 	# website is also responsive
-	<img src="https://user-images.githubusercontent.com/69770580/116818064-bb773680-ab69-11eb-808d-1d71d7a4277c.gif" width="100%" />
+
+	https://user-images.githubusercontent.com/69770580/116818138-07c27680-ab6a-11eb-8df3-c30827850747.mp4
+
+
 
 
 	
