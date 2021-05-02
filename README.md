@@ -91,7 +91,9 @@
 	<br/><br/>
 	
 	# webiste is also responsive
-	gif from phone perspective
+	<img src="https://user-images.githubusercontent.com/69770580/116818064-bb773680-ab69-11eb-808d-1d71d7a4277c.gif" width="100%" />
+
+
 	
   	<br/><br/>
   	
